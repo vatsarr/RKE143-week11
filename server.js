@@ -5,6 +5,8 @@ const fullRecipesRouter = require("./routes/fullRecipes.routes.js");
 const randomRouter = require("./routes/randomRecipe.routes.js");
 
 const app = express();
+app.use(express.json());
+
 const port = 3000;
 
 app.get("/", (req, res) => {
