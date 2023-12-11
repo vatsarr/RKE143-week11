@@ -63,4 +63,28 @@ router.put("/", async (req, res) => {
     }
 });
 
+router.delete("/", async (req, res) => {
+    const { recipename } = req.body;
+
+    const data = await db.query("SELECT * FROM recipe where recipename = $1;", [
+        recipename,
+    ]);
+
+    if (data.rows.length === 0) {
+        res.json({ message: "There is no such recipe!" });
+    } else {
+        try {
+            const result = await db.query(
+                "DELETE FROM recipe WHERE recipename = $1;",
+                [recipename]
+            );
+            res.status(200).json({
+                message: `${result.rowCount} rows have been deleted.`,
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+});
+
 module.exports = router;
