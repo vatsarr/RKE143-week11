@@ -138,3 +138,8 @@ SELECT
     *
 FROM
     ingredient;
+
+SELECT
+    *
+FROM
+    ingredientInRecipe;

@@ -87,4 +87,31 @@ router.delete("/", async (req, res) => {
     }
 });
 
+router.post("/addingredientinrecipe", async (req, res) => {
+    const { recipename, ingredientname } = req.body;
+
+    const data = await db.query(
+        "SELECT a.recipeName, b.ingredientName FROM recipe a INNER JOIN ingredientInRecipe c ON a.id = c.recipeId INNER JOIN ingredient b ON b.id = c.ingredientId WHERE a.recipeName = $1 AND b.ingredientName = $2;",
+        [recipename, ingredientname]
+    );
+
+    if (data.rows.length !== 0) {
+        res.json({ message: "Record already exists." });
+    } else {
+        try {
+            const result = await db.query(
+                "INSERT INTO ingredientInRecipe (recipeid, ingredientid) SELECT a.id, b.id FROM recipe a JOIN ingredient b ON a.recipeName = $1 AND b.ingredientname = $2;",
+                [recipename, ingredientname]
+            );
+
+            console.log(result.rowCount);
+            res.status(200).json({
+                message: `${result.rowCount} rows have been added.`,
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+});
+
 module.exports = router;
