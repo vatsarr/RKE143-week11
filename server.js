@@ -9,6 +9,12 @@ const db = require("./db");
 
 const port = 3000;
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
+
 db.connect((error) => {
     if (error) {
         console.log("DB connection failed!");
@@ -20,10 +26,6 @@ db.connect((error) => {
 const app = express();
 app.use(express.json());
 app.use(bodyParser.json());
-
-app.get("/", (req, res) => {
-    res.render("index");
-});
 
 app.use("/recipes", recipesRouter);
 app.use("/ingredients", ingredientsRouter);
