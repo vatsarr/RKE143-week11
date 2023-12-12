@@ -7,6 +7,7 @@ const randomRouter = require("./routes/randomRecipe.routes.js");
 const usersRouter = require("./routes/users.routes.js");
 const db = require("./db");
 
+const app = express();
 const port = 3000;
 
 app.use((req, res, next) => {
@@ -23,7 +24,6 @@ db.connect((error) => {
     }
 });
 
-const app = express();
 app.use(express.json());
 app.use(bodyParser.json());
 
